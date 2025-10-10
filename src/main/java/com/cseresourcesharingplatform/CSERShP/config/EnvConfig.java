@@ -6,7 +6,6 @@ public class EnvConfig {
     public EnvConfig() {
         Dotenv dotenv = Dotenv.load();
         dotenv.entries().forEach(entry ->
-
         {
             System.setProperty(entry.getKey(), entry.getValue());
         });

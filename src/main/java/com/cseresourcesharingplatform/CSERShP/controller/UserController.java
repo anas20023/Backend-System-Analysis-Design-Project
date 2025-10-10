@@ -94,10 +94,11 @@ public class UserController {
     @PostMapping("/forgot")
     public ResponseEntity<Optional> forgotUser(@RequestBody Map<String, String> payload) {
         String email = payload.get("email");
-        if(userService.existsByEmail(email)){
-            return (ResponseEntity<Optional>) ResponseEntity.ok();
+        //System.out.println(email);
+        if(!userService.existsByEmail(email)){
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(userService.getUserById(23L));
     }
 
     // ✅ Delete user

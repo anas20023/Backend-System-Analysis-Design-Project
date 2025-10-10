@@ -52,8 +52,8 @@ public class User {
     @OneToMany(mappedBy = "admin")
     private List<ApprovalLog> approvals;
 
-    @OneToMany(mappedBy = "user")
-    private List<Subscription> subscriptions;
+    @OneToOne(mappedBy = "user")
+    private Subscription subscriptions;
 
     @OneToMany(mappedBy = "user")
     private List<Payment> payments;
