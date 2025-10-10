@@ -1,5 +1,6 @@
 package com.cseresourcesharingplatform.CSERShP.controller;
 
+import com.cseresourcesharingplatform.CSERShP.Repository.UserRepository;
 import com.cseresourcesharingplatform.CSERShP.Services.AuthService;
 import com.cseresourcesharingplatform.CSERShP.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class UserController {
     private final UserService userService;
     @Autowired
     private JwtUtil jwtUtil;
+    @Autowired
+    private UserRepository userRepository;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -98,7 +101,10 @@ public class UserController {
         if(!userService.existsByEmail(email)){
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(userService.getUserById(23L));
+//        String code=authService.generateCode();
+//        System.out.println(code);
+       ResponseEntity<Optional> res= authService.sentCodeToEmail(authService.generateCode(),email);
+        return ResponseEntity.ok(res.getBody());
     }
 
     // ✅ Delete user
