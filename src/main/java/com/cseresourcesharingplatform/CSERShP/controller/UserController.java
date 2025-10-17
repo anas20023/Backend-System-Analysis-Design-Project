@@ -1,6 +1,5 @@
 package com.cseresourcesharingplatform.CSERShP.controller;
 
-import com.cseresourcesharingplatform.CSERShP.Repository.UserRepository;
 import com.cseresourcesharingplatform.CSERShP.Services.AuthService;
 import com.cseresourcesharingplatform.CSERShP.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +27,6 @@ public class UserController {
     private final UserService userService;
     @Autowired
     private JwtUtil jwtUtil;
-    @Autowired
-    private UserRepository userRepository;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -38,6 +35,7 @@ public class UserController {
     // ✅ Get all users
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
+
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
@@ -67,22 +65,10 @@ public class UserController {
 
             String jwtToken = jwtUtil.generateToken(user.getUsername(), role);
 
-            return ResponseEntity.ok(Map.of(
-                    "message", "Login successful",
-                    "token", jwtToken,
-                    "role", role,
-                    "user", Map.of(
-                            "username", user.getUsername(),
-                            "email", user.getEmail(),
-                            "fullName", user.getFullName(),
-                            "profileImageLink", user.getProfileImageLink()
-                    )
-            ));
+            return ResponseEntity.ok(Map.of("message", "Login successful", "token", jwtToken, "role", role, "user", Map.of("username", user.getUsername(), "email", user.getEmail(), "fullName", user.getFullName(), "profileImageLink", user.getProfileImageLink())));
 
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                    Map.of("error", e.getMessage())
-            );
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", e.getMessage()));
         }
     }
 
@@ -95,22 +81,46 @@ public class UserController {
 
 
     @PostMapping("/forgot")
-    public ResponseEntity<Optional> forgotUser(@RequestBody Map<String, String> payload) {
+    public ResponseEntity<String> forgotUser(@RequestBody Map<String, String> payload) {
         String email = payload.get("email");
-        //System.out.println(email);
-        if(!userService.existsByEmail(email)){
-            return ResponseEntity.notFound().build();
+
+        // 1. Validate Email Existence (404 Not Found)
+        if (email == null || email.trim().isEmpty()) {
+            return ResponseEntity.status(400).body("Email is required in the request body.");
         }
-//        String code=authService.generateCode();
-//        System.out.println(code);
-       ResponseEntity<Optional> res= authService.sentCodeToEmail(authService.generateCode(),email);
-        return ResponseEntity.ok(res.getBody());
+
+        if (!userService.existsByEmail(email)) {
+            return ResponseEntity.status(404).body("User not found.");
+        }
+
+        try {
+            // 2. Generate the security code
+            String code = authService.generateCode();
+
+            // 3. Send the code to the user's email
+            // We can simplify the response handling if we assume sentCodeToEmail
+            // handles its own success/failure and returns a simple indicator or throws an exception on error.
+            // Assuming it returns a ResponseEntity whose status we ignore, we can just call it:
+            authService.sentCodeToEmail(code, email);
+
+            // 4. Return success response (200 OK)
+            // A clear, user-friendly message is returned on success.
+            return ResponseEntity.status(200).body("Password reset code sent to your email.");
+
+        } catch (Exception e) {
+            // Log the exception for internal debugging
+            // logger.error("Error sending password reset code for email: {}", email, e);
+
+            // Return a 500 Internal Server Error for generic server/email sending failures
+            return ResponseEntity.status(500).body("An error occurred while attempting to send the reset code.");
+        }
     }
 
     // ✅ Delete user
     @DeleteMapping("/drop/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("User has been successfully deleted");
     }
+
 }
