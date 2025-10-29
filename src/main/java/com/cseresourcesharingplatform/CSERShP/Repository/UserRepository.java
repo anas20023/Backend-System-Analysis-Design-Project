@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.cseresourcesharingplatform.CSERShP.model.User;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -14,6 +15,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "select u from User u where u.id=:id")
     Optional<User> seeAllUsers(@Param("id") Long id);
+    @Query("select u from User u")
+    List<User> findAllUsers();
     Optional<User> findByEmail(String email);
     Optional<User> findByUsername(String username);
     boolean existsByEmail(String email);
