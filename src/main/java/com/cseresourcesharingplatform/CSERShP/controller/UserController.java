@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 
 // import java.util.Optional;
-@CrossOrigin
+@CrossOrigin(origins = {"http://localhost:5173","https://sad.anasibnbelal.live"})
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
