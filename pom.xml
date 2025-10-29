@@ -99,7 +99,7 @@
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <artifactId>mysql-connector-java</artifactId>T
             <version>8.0.33</version>
         </dependency>
         <dependency>
