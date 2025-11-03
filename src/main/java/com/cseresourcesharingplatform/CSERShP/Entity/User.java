@@ -1,4 +1,4 @@
-package com.cseresourcesharingplatform.CSERShP.model;
+package com.cseresourcesharingplatform.CSERShP.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,6 +31,8 @@ public class User {
     private String profileImageLink;
     @Column(nullable = false, length = 255)
     private String pwhash;
+    @Column(nullable = true, length = 8)
+    private String recoveryCode;
 
     @Column(nullable = false, updatable = false, insertable = false,
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -57,5 +59,9 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Payment> payments;
+
+    public String getName() {
+        return  fullName;
+    }
 }
 

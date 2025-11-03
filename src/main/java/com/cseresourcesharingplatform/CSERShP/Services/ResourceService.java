@@ -3,8 +3,8 @@ package com.cseresourcesharingplatform.CSERShP.Services;
 import org.springframework.stereotype.Service;
 
 import com.cseresourcesharingplatform.CSERShP.Repository.ResourceRepository;
-import com.cseresourcesharingplatform.CSERShP.model.Resource;
-import com.cseresourcesharingplatform.CSERShP.model.ResourceStatus;
+import com.cseresourcesharingplatform.CSERShP.Entity.Resource;
+import com.cseresourcesharingplatform.CSERShP.Entity.ResourceStatus;
 
 import java.util.List;
 import java.util.Optional;

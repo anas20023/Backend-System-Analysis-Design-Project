@@ -1,30 +1,26 @@
-package com.cseresourcesharingplatform.CSERShP.model;
+package com.cseresourcesharingplatform.CSERShP.Entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "ratings", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"resource_id", "user_id"})
+@Table(name = "user_roles", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"user_id", "role_id"})
 })
-public class Rating {
+public class UserRole {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "resource_id")
-    private Resource resource;
-
-    @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(nullable = false)
-    private int ratingValue;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     @Column(nullable = false, updatable = false, insertable = false,
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
 }
-

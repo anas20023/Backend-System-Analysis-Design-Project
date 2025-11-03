@@ -3,7 +3,7 @@ package com.cseresourcesharingplatform.CSERShP.Services;
 import org.springframework.stereotype.Service;
 
 import com.cseresourcesharingplatform.CSERShP.Repository.RoleRepository;
-import com.cseresourcesharingplatform.CSERShP.model.Role;
+import com.cseresourcesharingplatform.CSERShP.Entity.Role;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package com.cseresourcesharingplatform.CSERShP.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.cseresourcesharingplatform.CSERShP.model.Role;
+import com.cseresourcesharingplatform.CSERShP.Entity.Role;
 
 import java.util.Optional;
 

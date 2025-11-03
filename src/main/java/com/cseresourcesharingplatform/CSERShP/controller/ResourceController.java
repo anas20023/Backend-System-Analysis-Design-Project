@@ -4,7 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.cseresourcesharingplatform.CSERShP.Services.ResourceService;
-import com.cseresourcesharingplatform.CSERShP.model.Resource;
+import com.cseresourcesharingplatform.CSERShP.Entity.Resource;
 
 import java.util.List;
 

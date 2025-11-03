@@ -1,4 +1,4 @@
-package com.cseresourcesharingplatform.CSERShP.model;
+package com.cseresourcesharingplatform.CSERShP.Entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;

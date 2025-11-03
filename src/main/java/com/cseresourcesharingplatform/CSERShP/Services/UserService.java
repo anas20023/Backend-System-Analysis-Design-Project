@@ -1,13 +1,15 @@
 package com.cseresourcesharingplatform.CSERShP.Services;
 
+import com.cseresourcesharingplatform.CSERShP.DTOs.UserResponseDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.cseresourcesharingplatform.CSERShP.Repository.UserRepository;
-import com.cseresourcesharingplatform.CSERShP.model.User;
+import com.cseresourcesharingplatform.CSERShP.Entity.User;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -21,9 +23,15 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAllUsers();
+    public List<UserResponseDTO> getAllUsers() {
+        List<User> users = userRepository.findAllUsers();
+
+        // Convert each User → UserResponseDTO using stream
+        return users.stream()
+                .map(UserResponseDTO::new)
+                .collect(Collectors.toList());
     }
+
 
     public Optional<User> seeAllUsers(Long id) {
         return userRepository.seeAllUsers(id);

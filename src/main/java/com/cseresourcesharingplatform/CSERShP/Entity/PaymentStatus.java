@@ -1,4 +1,4 @@
-package com.cseresourcesharingplatform.CSERShP.model;
+package com.cseresourcesharingplatform.CSERShP.Entity;
 
 public enum PaymentStatus {
     PENDING,

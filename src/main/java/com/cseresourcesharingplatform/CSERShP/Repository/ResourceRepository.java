@@ -2,8 +2,8 @@ package com.cseresourcesharingplatform.CSERShP.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.cseresourcesharingplatform.CSERShP.model.Resource;
-import com.cseresourcesharingplatform.CSERShP.model.ResourceStatus;
+import com.cseresourcesharingplatform.CSERShP.Entity.Resource;
+import com.cseresourcesharingplatform.CSERShP.Entity.ResourceStatus;
 
 import java.util.List;
 

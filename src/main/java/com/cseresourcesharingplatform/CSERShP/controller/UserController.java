@@ -1,6 +1,8 @@
 package com.cseresourcesharingplatform.CSERShP.controller;
 
+import com.cseresourcesharingplatform.CSERShP.DTOs.UserResponseDTO;
 import com.cseresourcesharingplatform.CSERShP.Services.AuthService;
+import com.cseresourcesharingplatform.CSERShP.Services.EmailService;
 import com.cseresourcesharingplatform.CSERShP.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,11 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.cseresourcesharingplatform.CSERShP.Services.UserService;
-import com.cseresourcesharingplatform.CSERShP.model.User;
+import com.cseresourcesharingplatform.CSERShP.Entity.User;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 // import java.util.Optional;
 @CrossOrigin(origins = {"http://localhost:5173","https://sad.anasibnbelal.live"})
@@ -22,7 +23,8 @@ public class UserController {
 
     @Autowired
     private AuthService authService;
-
+    @Autowired
+    private EmailService emailService;
     @Autowired
     private final UserService userService;
     @Autowired
@@ -34,17 +36,15 @@ public class UserController {
 
     // ✅ Get all users
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-
-        return ResponseEntity.ok(userService.getAllUsers());
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
+        List<UserResponseDTO> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
     }
-
     // ✅ Get user by ID
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         return userService.seeAllUsers(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
-
     // ✅ Create new user
     @PostMapping("/new")
     public ResponseEntity<User> createUser(@RequestBody User user) {
@@ -86,7 +86,7 @@ public class UserController {
 
         // 1. Validate Email Existence (404 Not Found)
         if (email == null || email.trim().isEmpty()) {
-            return ResponseEntity.status(400).body("Email is required in the request body.");
+            return ResponseEntity.status(400).body("Email is required !");
         }
 
         if (!userService.existsByEmail(email)) {
@@ -95,13 +95,12 @@ public class UserController {
 
         try {
             // 2. Generate the security code
-            String code = authService.generateCode();
 
             // 3. Send the code to the user's email
             // We can simplify the response handling if we assume sentCodeToEmail
             // handles its own success/failure and returns a simple indicator or throws an exception on error.
             // Assuming it returns a ResponseEntity whose status we ignore, we can just call it:
-            authService.sentCodeToEmail(code, email);
+            authService.sendCodeToEmail(email);
 
             // 4. Return success response (200 OK)
             // A clear, user-friendly message is returned on success.

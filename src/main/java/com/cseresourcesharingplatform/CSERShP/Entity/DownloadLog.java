@@ -1,13 +1,11 @@
-package com.cseresourcesharingplatform.CSERShP.model;
+package com.cseresourcesharingplatform.CSERShP.Entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user_roles", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"user_id", "role_id"})
-})
-public class UserRole {
+@Table(name = "download_log")
+public class DownloadLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,10 +15,10 @@ public class UserRole {
     private User user;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "role_id")
-    private Role role;
+    @JoinColumn(name = "resource_id")
+    private Resource resource;
 
     @Column(nullable = false, updatable = false, insertable = false,
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime createdAt;
+    private LocalDateTime downloadedAt;
 }
