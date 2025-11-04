@@ -3,9 +3,14 @@ package com.cseresourcesharingplatform.CSERShP.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
+
 import org.hibernate.annotations.CreationTimestamp;
 
 @Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -13,14 +18,24 @@ import org.hibernate.annotations.CreationTimestamp;
 public class ForgotLog {
 
     @Id
-    @Column(nullable = false, unique = true, length = 100)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(nullable = false, length = 100)
     private String f_email;
 
-    @Column(nullable = false, length = 6)
+    @Column(nullable = false, length = 8)
     private String code;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false, insertable = false,
-            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Timestamp timestamp;
+    @Column(
+            name = "timestamp",
+            nullable = false,
+            updatable = false,
+            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+    )
+    private LocalDateTime timestamp;
+
+
+
+
 }

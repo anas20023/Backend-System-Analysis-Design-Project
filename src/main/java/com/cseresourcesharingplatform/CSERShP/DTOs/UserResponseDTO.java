@@ -11,6 +11,7 @@ public class UserResponseDTO {
     private String name;
     private String username;
     private String email;
+    private String avatarUrl;
     private String joinedDate;
 
     // Constructor for mapping a single User entity
@@ -19,6 +20,7 @@ public class UserResponseDTO {
         this.username = user.getUsername();
         this.name = user.getFullName();
         this.email = user.getEmail();
+        this.avatarUrl=user.getProfileImageLink();
         this.joinedDate = user.getCreatedAt().toString();
     }
 }

@@ -31,8 +31,6 @@ public class User {
     private String profileImageLink;
     @Column(nullable = false, length = 255)
     private String pwhash;
-    @Column(nullable = true, length = 8)
-    private String recoveryCode;
 
     @Column(nullable = false, updatable = false, insertable = false,
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -41,6 +39,7 @@ public class User {
     // Relations
     @OneToMany(mappedBy = "user")
     private List<UserRole> userRoles;
+
 
     @OneToMany(mappedBy = "uploader")
     private List<Resource> resources;

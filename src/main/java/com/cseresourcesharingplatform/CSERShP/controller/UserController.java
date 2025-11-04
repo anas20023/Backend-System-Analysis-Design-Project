@@ -3,7 +3,9 @@ package com.cseresourcesharingplatform.CSERShP.controller;
 import com.cseresourcesharingplatform.CSERShP.DTOs.UserResponseDTO;
 import com.cseresourcesharingplatform.CSERShP.Services.AuthService;
 import com.cseresourcesharingplatform.CSERShP.Services.EmailService;
+import com.cseresourcesharingplatform.CSERShP.Services.ResourceNotFoundException;
 import com.cseresourcesharingplatform.CSERShP.security.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +17,6 @@ import com.cseresourcesharingplatform.CSERShP.Entity.User;
 import java.util.List;
 import java.util.Map;
 
-// import java.util.Optional;
 @CrossOrigin(origins = {"http://localhost:5173","https://sad.anasibnbelal.live"})
 @RestController
 @RequestMapping("/api/users")
@@ -34,18 +35,27 @@ public class UserController {
         this.userService = userService;
     }
 
-    // ✅ Get all users
+    //  Get all users
     @GetMapping
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
         List<UserResponseDTO> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
-    // ✅ Get user by ID
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDTO> getCurrentUser(HttpServletRequest request) throws ResourceNotFoundException {
+        //System.out.println(request.getHeader("Authorization"));
+       try{
+           return ResponseEntity.ok(userService.getMyProfile(request));
+       }catch (Exception e){
+           throw  new ResourceNotFoundException(e.getMessage());
+       }
+    }
+    //  Get user by ID
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         return userService.seeAllUsers(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
-    // ✅ Create new user
+    //  Create new user
     @PostMapping("/new")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         return ResponseEntity.ok(userService.createUser(user));
@@ -73,7 +83,7 @@ public class UserController {
     }
 
 
-    // ✅ Update user
+    //  Update user
     @PutMapping("/update/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
         return ResponseEntity.ok(userService.updateUser(id, user));
@@ -84,7 +94,6 @@ public class UserController {
     public ResponseEntity<String> forgotUser(@RequestBody Map<String, String> payload) {
         String email = payload.get("email");
 
-        // 1. Validate Email Existence (404 Not Found)
         if (email == null || email.trim().isEmpty()) {
             return ResponseEntity.status(400).body("Email is required !");
         }
@@ -94,28 +103,30 @@ public class UserController {
         }
 
         try {
-            // 2. Generate the security code
-
-            // 3. Send the code to the user's email
-            // We can simplify the response handling if we assume sentCodeToEmail
-            // handles its own success/failure and returns a simple indicator or throws an exception on error.
-            // Assuming it returns a ResponseEntity whose status we ignore, we can just call it:
             authService.sendCodeToEmail(email);
-
-            // 4. Return success response (200 OK)
-            // A clear, user-friendly message is returned on success.
             return ResponseEntity.status(200).body("Password reset code sent to your email.");
 
         } catch (Exception e) {
-            // Log the exception for internal debugging
-            // logger.error("Error sending password reset code for email: {}", email, e);
 
-            // Return a 500 Internal Server Error for generic server/email sending failures
             return ResponseEntity.status(500).body("An error occurred while attempting to send the reset code.");
         }
     }
 
-    // ✅ Delete user
+    @PostMapping("/newpassword")
+    public ResponseEntity<String> newPassword(@RequestBody Map<String, String> payload) throws Exception {
+        String code= payload.get("otp");
+        String email= payload.get("email");
+        String newPassword= payload.get("newPassword");
+        try {
+            authService.resetPassword(email,code,newPassword);
+            return ResponseEntity.status(200).body("Password Reset Successfully !");
+        }
+        catch (Exception e) {
+            throw new Exception(e);
+        }
+    }
+
+    //  Delete user
     @DeleteMapping("/drop/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
