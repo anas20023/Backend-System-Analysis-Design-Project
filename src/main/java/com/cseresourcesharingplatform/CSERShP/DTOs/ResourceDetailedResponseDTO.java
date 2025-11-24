@@ -29,7 +29,7 @@ public class ResourceDetailedResponseDTO {
         this.approvedAt = resource.getApprovedAt() != null ? resource.getApprovedAt().toString() : null;
 
         // uploader full name
-        this.uploaderName = resource.getUploader() != null ? resource.getUploader().getFullName() : null;
+        this.uploaderName = resource.getUploader() != null ? resource.getUploader().getUsername() : null;
 
         // download count from relation list
         this.downloadCount = resource.getDownloads() != null ? resource.getDownloads().size() : 0;

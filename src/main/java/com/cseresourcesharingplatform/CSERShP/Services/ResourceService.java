@@ -1,6 +1,7 @@
 package com.cseresourcesharingplatform.CSERShP.Services;
 
 import com.cseresourcesharingplatform.CSERShP.DTOs.ResourceDetailedResponseDTO;
+import com.cseresourcesharingplatform.CSERShP.DTOs.ResourceResponseDTO;
 import com.cseresourcesharingplatform.CSERShP.DTOs.ResourceUploadDTO;
 import com.cseresourcesharingplatform.CSERShP.Entity.Resource;
 import com.cseresourcesharingplatform.CSERShP.Entity.ResourceStatus;
@@ -30,6 +31,12 @@ public class ResourceService {
         return resourceRepository.findAllResources()
                 .stream()
                 .map(ResourceDetailedResponseDTO::new)
+                .toList();
+    }
+    public List<ResourceResponseDTO> getAllResourcesAdmin() {
+        return resourceRepository.findAllResourcesAdmin()
+                .stream()
+                .map(ResourceResponseDTO::new)
                 .toList();
     }
 
@@ -63,6 +70,26 @@ public class ResourceService {
         return resourceRepository.findById(id)
                 .map(r -> {
                     r.setStatus(ResourceStatus.APPROVED);
+                    r.setApprovedAt(LocalDateTime.now());
+                    return resourceRepository.save(r);
+                })
+                .orElseThrow(() -> new IllegalArgumentException("Resource not found with id: " + id));
+    }
+    @Transactional
+    public Resource pendingResource(Long id) {
+        return resourceRepository.findById(id)
+                .map(r -> {
+                    r.setStatus(ResourceStatus.PENDING);
+                    r.setApprovedAt(LocalDateTime.now());
+                    return resourceRepository.save(r);
+                })
+                .orElseThrow(() -> new IllegalArgumentException("Resource not found with id: " + id));
+    }
+    @Transactional
+    public Resource declineResource(Long id) {
+        return resourceRepository.findById(id)
+                .map(r -> {
+                    r.setStatus(ResourceStatus.DECLINED);
                     r.setApprovedAt(LocalDateTime.now());
                     return resourceRepository.save(r);
                 })

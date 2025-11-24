@@ -16,6 +16,14 @@ public interface ResourceRepository extends JpaRepository<Resource, Long> {
     FROM Resource r
     LEFT JOIN FETCH r.uploader
     LEFT JOIN FETCH r.downloads
+""")
+    List<Resource> findAllResourcesAdmin();
+    @NotNull
+    @Query("""
+    SELECT DISTINCT r
+    FROM Resource r
+    LEFT JOIN FETCH r.uploader
+    LEFT JOIN FETCH r.downloads
     WHERE r.status = com.cseresourcesharingplatform.CSERShP.Entity.ResourceStatus.APPROVED
 """)
     List<Resource> findAllResources();
