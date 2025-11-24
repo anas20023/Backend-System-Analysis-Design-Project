@@ -21,6 +21,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from User u")
     List<User> findAllUsers();
     // Save the OTP in User Entity
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.resources WHERE u.id = :id")
+    Optional<User> findByIdWithResources(@Param("id") Long id);
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO forgot_log(f_email, code) VALUES (:email, :code)", nativeQuery = true)

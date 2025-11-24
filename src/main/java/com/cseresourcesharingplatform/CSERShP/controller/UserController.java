@@ -50,6 +50,10 @@ public class UserController {
            throw  new ResourceNotFoundException(e.getMessage());
        }
     }
+//    @PatchMapping("/me")
+//    public ResponseEntity<UserResponseDTO> updateCurrentUser(HttpServletRequest request) throws ResourceNotFoundException {
+//
+//    }
     //  Get user by ID
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
@@ -122,7 +126,7 @@ public class UserController {
             return ResponseEntity.status(200).body("Password Reset Successfully !");
         }
         catch (Exception e) {
-            throw new Exception(e);
+            return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 

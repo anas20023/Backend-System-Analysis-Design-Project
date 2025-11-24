@@ -93,5 +93,16 @@ public class UserService {
 
         // 4. Map to DTO
         return new UserResponseDTO(user);
+
+    }
+    public UserResponseDTO getUserWithResources(Long userId) {
+        User user = null;
+        try {
+            user = userRepository.findByIdWithResources(userId)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found: " + userId));
+        } catch (ResourceNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return new UserResponseDTO(user);
     }
 }

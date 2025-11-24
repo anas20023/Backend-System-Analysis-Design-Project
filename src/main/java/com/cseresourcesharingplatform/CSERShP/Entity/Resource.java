@@ -1,17 +1,24 @@
 package com.cseresourcesharingplatform.CSERShP.Entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "resources")
 public class Resource {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     @ManyToOne(optional = false)
     @JoinColumn(name = "uploader_id")
     private User uploader;
@@ -25,6 +32,7 @@ public class Resource {
     @Column(nullable = false)
     private String fileUrl;
 
+    @Setter
     @Enumerated(EnumType.STRING)
     private ResourceStatus status = ResourceStatus.PENDING;
 
@@ -32,6 +40,7 @@ public class Resource {
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
 
+    @Setter
     private LocalDateTime approvedAt;
 
     // Relations
@@ -44,13 +53,15 @@ public class Resource {
     @OneToMany(mappedBy = "resource")
     private List<ApprovalLog> approvals;
 
-    public void setStatus(ResourceStatus pending) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setStatus'");
+    public void setTitle(Object title) {
+        this.title = (String)title;
     }
 
-    public void setApprovedAt(Date date) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setApprovedAt'");
+    public void setDescription(Object description) {
+        this.description = (String)description;
+    }
+
+    public void setFileUrl(Object fileUrl) {
+        this.fileUrl = (String)fileUrl;
     }
 }

@@ -1,11 +1,18 @@
 package com.cseresourcesharingplatform.CSERShP.controller;
 
+import com.cseresourcesharingplatform.CSERShP.DTOs.ResourceUploadDTO;
+import com.cseresourcesharingplatform.CSERShP.Repository.ResourceRepository;
+import com.cseresourcesharingplatform.CSERShP.Services.AuthService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.cseresourcesharingplatform.CSERShP.Services.ResourceService;
 import com.cseresourcesharingplatform.CSERShP.Entity.Resource;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -13,9 +20,11 @@ import java.util.List;
 public class ResourceController {
 
     private final ResourceService resourceService;
+    private final AuthService authService;
 
-    public ResourceController(ResourceService resourceService) {
+    public ResourceController(ResourceService resourceService, AuthService authService, ResourceRepository resourceRepository, ObjectMapper objectMapper) {
         this.resourceService = resourceService;
+        this.authService = authService;
     }
 
     // ✅ Get all resources
@@ -32,10 +41,10 @@ public class ResourceController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // ✅ Upload new resource
-    @PostMapping
-    public ResponseEntity<Resource> uploadResource(@RequestBody Resource resource) {
-        return ResponseEntity.ok(resourceService.uploadResource(resource));
+    @PostMapping("/upload")
+    public ResponseEntity<?> upload(@RequestBody ResourceUploadDTO dto) {
+        Resource saved = resourceService.upload(dto);
+        return ResponseEntity.ok(saved);
     }
 
     // ✅ Approve a resource

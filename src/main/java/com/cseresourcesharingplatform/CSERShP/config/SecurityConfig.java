@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").permitAll()       // login/register
+                        .requestMatchers("/**").permitAll()       // login/register
                         .requestMatchers("/api/users/me").authenticated()  // profile endpoint
                         .anyRequest().authenticated()
                 )
