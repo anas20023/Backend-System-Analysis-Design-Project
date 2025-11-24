@@ -1,18 +1,16 @@
 package com.cseresourcesharingplatform.CSERShP.controller;
 
+import com.cseresourcesharingplatform.CSERShP.DTOs.ResourceDetailedResponseDTO;
 import com.cseresourcesharingplatform.CSERShP.DTOs.ResourceUploadDTO;
 import com.cseresourcesharingplatform.CSERShP.Repository.ResourceRepository;
 import com.cseresourcesharingplatform.CSERShP.Services.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.cseresourcesharingplatform.CSERShP.Services.ResourceService;
 import com.cseresourcesharingplatform.CSERShP.Entity.Resource;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -29,7 +27,7 @@ public class ResourceController {
 
     // ✅ Get all resources
     @GetMapping
-    public ResponseEntity<List<Resource>> getAllResources() {
+    public ResponseEntity<List<ResourceDetailedResponseDTO>> getAllResources() {
         return ResponseEntity.ok(resourceService.getAllResources());
     }
 

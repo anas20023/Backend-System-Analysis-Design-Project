@@ -1,5 +1,6 @@
 package com.cseresourcesharingplatform.CSERShP.Services;
 
+import com.cseresourcesharingplatform.CSERShP.DTOs.ResourceDetailedResponseDTO;
 import com.cseresourcesharingplatform.CSERShP.DTOs.ResourceUploadDTO;
 import com.cseresourcesharingplatform.CSERShP.Entity.Resource;
 import com.cseresourcesharingplatform.CSERShP.Entity.ResourceStatus;
@@ -25,8 +26,11 @@ public class ResourceService {
         this.userRepository = userRepository;
     }
 
-    public List<Resource> getAllResources() {
-        return resourceRepository.findAll();
+    public List<ResourceDetailedResponseDTO> getAllResources() {
+        return resourceRepository.findAllResources()
+                .stream()
+                .map(ResourceDetailedResponseDTO::new)
+                .toList();
     }
 
     public Optional<Resource> getResourceById(Long id) {
